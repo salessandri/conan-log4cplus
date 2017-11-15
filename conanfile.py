@@ -2,7 +2,7 @@ import os
 from conans import ConanFile, CMake, tools
 
 CMAKELISTS_PATCH = '''diff --git a/CMakeLists.txt b/CMakeLists.txt
-index 3de896e5..ce251795 100644
+index 3de896e5..2938b6a0 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
 @@ -12,6 +12,8 @@ endif ()
@@ -14,6 +14,15 @@ index 3de896e5..ce251795 100644
  cmake_minimum_required (VERSION 2.8.4)
 
  enable_language (CXX)
+@@ -70,8 +72,6 @@ option(ENABLE_SYMBOLS_VISIBILITY
+   "Enable compiler and platform specific options for symbols visibility"
+   ON)
+
+-set(_WIN32_WINNT 0x0500 CACHE STRING "Define Windows API version to use.")
+-
+ option(LOG4CPLUS_ENABLE_DECORATED_LIBRARY_NAME
+   "Turns on resulting file name decoration for static and UNICODE builds." ON)
+ if (LOG4CPLUS_ENABLE_DECORATED_LIBRARY_NAME)
 '''
 
 class Log4cplusConan(ConanFile):
