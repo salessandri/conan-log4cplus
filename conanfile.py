@@ -1,6 +1,20 @@
 import os
 from conans import ConanFile, CMake, tools
 
+CMAKELISTS_PATCH = '''diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 3de896e5..ce251795 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -12,6 +12,8 @@ endif ()
+ set (CMAKE_LEGACY_CYGWIN_WIN32 0)
+
+ project (log4cplus)
++include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
++conan_basic_setup()
+ cmake_minimum_required (VERSION 2.8.4)
+
+ enable_language (CXX)
+'''
 
 class Log4cplusConan(ConanFile):
     name = "log4cplus"
@@ -37,15 +51,7 @@ class Log4cplusConan(ConanFile):
     def source(self):
         self.run("git clone https://github.com/log4cplus/log4cplus.git")
         self.run("cd log4cplus && git checkout REL_1_2_0")
-        # This small hack might be useful to guarantee proper /MT /MD linkage in MSVC
-        # if the packaged project doesn't have variables to set it properly
-        tools.replace_in_file(
-            "log4cplus/CMakeLists.txt",
-            "project (log4cplus)\n",
-            '''project (log4cplus)
-include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
-conan_basic_setup()
-''')
+        tools.patch('log4cplus', patch_string=CMAKELISTS_PATCH)
 
     def build(self):
         cmake = CMake(self)
@@ -54,7 +60,6 @@ conan_basic_setup()
         cmake.definitions["BUILD_SHARED_LIBS"] = self.options.shared
         cmake.definitions["LOG4CPLUS_SINGLE_THREADED"] = self.options.singleThreaded
         if self.options.workingLocale != 'None':
-            raise "ADASDASD"
             cmake.definitions["LOG4CPLUS_WORKING_LOCALE"] = self.options.workingLocale
         if self.options.workingCLocale != 'None':
             cmake.definitions["LOG4CPLUS_WORKING_C_LOCALE"] = self.options.workingCLocale
