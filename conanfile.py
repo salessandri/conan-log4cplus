@@ -109,6 +109,8 @@ class Log4cplusConan(ConanFile):
         if not self.options.shared:
             if self.settings.os == 'Linux':
                 self.cpp_info.libs.append('pthread')
+            elif self.settings.compiler == 'Visual Studio':
+                self.cpp_info.libs.append('Ws2_32')
         if self.options.unicode:
             self.cpp_info.defines.append('UNICODE')
 
