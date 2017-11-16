@@ -106,6 +106,9 @@ class Log4cplusConan(ConanFile):
 
     def package_info(self):
         self.cpp_info.libs = tools.collect_libs(self)
+        if not self.options.shared:
+            if self.settings.os == 'Linux':
+                self.cpp_info.libs.append('pthread')
         if self.options.unicode:
             self.cpp_info.defines.append('UNICODE')
 
