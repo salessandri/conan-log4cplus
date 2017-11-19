@@ -49,8 +49,8 @@ class Log4cplusConan(ConanFile):
     options = {
         "shared": [True, False],
         "singleThreaded": [True, False],
-        "workingLocale": [None, True, False],
-        "workingCLocale": [None, True, False],
+        "workingLocale": [True, False],
+        "workingCLocale": [True, False],
         "withQt4Appender": [True, False],
         "withQt5Appender": [True, False],
         "unicode": [True, False],
@@ -61,8 +61,8 @@ class Log4cplusConan(ConanFile):
     default_options = \
         "shared=False", \
         "singleThreaded=False", \
-        "workingLocale=None", \
-        "workingCLocale=None", \
+        "workingLocale=True", \
+        "workingCLocale=False", \
         "withQt4Appender=False", \
         "withQt5Appender=False", \
         "unicode=False", \
@@ -83,10 +83,8 @@ class Log4cplusConan(ConanFile):
         cmake.definitions["LOG4CPLUS_BUILD_LOGGINGSERVER"] = False
         cmake.definitions["BUILD_SHARED_LIBS"] = self.options.shared
         cmake.definitions["LOG4CPLUS_SINGLE_THREADED"] = self.options.singleThreaded
-        if self.options.workingLocale != 'None':
-            cmake.definitions["LOG4CPLUS_WORKING_LOCALE"] = self.options.workingLocale
-        if self.options.workingCLocale != 'None':
-            cmake.definitions["LOG4CPLUS_WORKING_C_LOCALE"] = self.options.workingCLocale
+        cmake.definitions["LOG4CPLUS_WORKING_LOCALE"] = self.options.workingLocale
+        cmake.definitions["LOG4CPLUS_WORKING_C_LOCALE"] = self.options.workingCLocale
         cmake.definitions["LOG4CPLUS_QT4"] = self.options.withQt4Appender
         cmake.definitions["LOG4CPLUS_QT5"] = self.options.withQt5Appender
         cmake.definitions["UNICODE"] = self.options.unicode
@@ -94,6 +92,7 @@ class Log4cplusConan(ConanFile):
         cmake.definitions["ENABLE_SYMBOLS_VISIBILITY"] = self.options.enableSymbolVisibility
         cmake.definitions["LOG4CPLUS_ENABLE_DECORATED_LIBRARY_NAME"] = self.options.decorateLibName
         cmake.configure(source_dir=self.name)
+        
         cmake.install()
 
     def package(self):
