@@ -72,7 +72,7 @@ class Log4cplusConan(ConanFile):
     generators = "cmake"
 
     def source(self):
-        self.run("git clone git@github.com:log4cplus/log4cplus.git")
+        self.run("git clone https://github.com/log4cplus/log4cplus.git")
         self.run("cd log4cplus && git checkout REL_1_2_0")
         tools.patch('log4cplus', patch_string=CMAKELISTS_PATCH)
         tools.patch('log4cplus', patch_string=SRC_CMAKELISTS_PATCH)
